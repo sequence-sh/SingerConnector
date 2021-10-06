@@ -4,23 +4,23 @@
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RootNamespace>Reductech.Templates.EDRConnector</RootNamespace>
-    <AssemblyName>Reductech.Templates.EDRConnector</AssemblyName>
+    <RootNamespace>Reductech.EDR.Connectors.Singer</RootNamespace>
+    <AssemblyName>Reductech.EDR.Connectors.Singer</AssemblyName>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
     <Version>0.2.0$(VersionSuffix)</Version>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Reductech.Templates.EDRConnector</PackageId>
-    <Title>EDR Connector Project Template</Title>
-    <Description>A class library for using application X in EDR Sequences</Description>
+    <PackageId>Reductech.EDR.Connectors.Singer</PackageId>
+    <Title>EDR Singer Connector</Title>
+    <Description>A class library for using Singer in EDR Sequences</Description>
     <Product>EDR</Product>
     <PackageTags>ediscovery;forensics;edrm;automation;orchestration</PackageTags>
 
-    <PackageProjectUrl>https://gitlab.com/reductech/templates/edr-connector</PackageProjectUrl>
-    <RepositoryUrl>https://gitlab.com/reductech/templates/edr-connector.git</RepositoryUrl>
-    <PackageReleaseNotes>Please see https://gitlab.com/reductech/templates/edr-connector/-/releases</PackageReleaseNotes>
+    <PackageProjectUrl>https://gitlab.com/reductech/edr/connectors/singer</PackageProjectUrl>
+    <RepositoryUrl>https://gitlab.com/reductech/edr/connectors/singer.git</RepositoryUrl>
+    <PackageReleaseNotes>Please see https://gitlab.com/reductech/edr/connectors/singer/-/releases</PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 
     <Authors>Reductech</Authors>
@@ -29,9 +29,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reductech.EDR.Core" Version="0.10.0">
+    <PackageReference Include="JsonSchema.Net" Version="1.11.3" />
+    <PackageReference Include="Reductech.EDR.Core" Version="0.11.0">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
   </ItemGroup>
 
   <ItemGroup Condition="$(PackConnector) != ''">

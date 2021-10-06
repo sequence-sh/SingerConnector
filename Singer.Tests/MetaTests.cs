@@ -1,7 +1,7 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Reductech.EDR.Core.TestHarness;
 
-namespace Reductech.Templates.EDRConnector.Tests
+namespace Reductech.EDR.Connectors.Singer.Tests
 {
 
 /// <summary>
@@ -10,7 +10,7 @@ namespace Reductech.Templates.EDRConnector.Tests
 public class MetaTests : MetaTestsBase
 {
     /// <inheritdoc />
-    public override Assembly StepAssembly => typeof(ConvertJsonToEntity).Assembly;
+    public override Assembly StepAssembly => typeof(FromSinger).Assembly;
 
     /// <inheritdoc />
     public override Assembly TestAssembly => typeof(MetaTests).Assembly;
