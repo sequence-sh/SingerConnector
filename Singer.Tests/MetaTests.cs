@@ -10,7 +10,7 @@ namespace Reductech.EDR.Connectors.Singer.Tests
 public class MetaTests : MetaTestsBase
 {
     /// <inheritdoc />
-    public override Assembly StepAssembly => typeof(ConvertJsonToEntity).Assembly;
+    public override Assembly StepAssembly => typeof(FromSinger).Assembly;
 
     /// <inheritdoc />
     public override Assembly TestAssembly => typeof(MetaTests).Assembly;
