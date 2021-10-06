@@ -26,13 +26,13 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
             var step = IngestAndLogAll(testData);
 
             yield return new StepCase(
-                "Read Singer Data",
-                step,
-                Unit.Default,
-                "()",
-                "('a': 1)",
-                "('a': 2)"
-            );
+                    "Read Singer Data",
+                    step,
+                    Unit.Default,
+                    "('a': 1)",
+                    "('a': 2)"
+                ).WithFileSystem()
+                .WithExpectedFileSystem(new[] { ("\\State.json", "{}") });
         }
     }
 
@@ -77,22 +77,22 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
                 ErrorCodeStructuredData.SchemaViolation
                     .ToErrorBuilder("Unknown Violation")
                     .WithLocationSingle(fromSingerStep)
-            );
+            ).WithFileSystem();
         }
     }
 
-    /// <inheritdoc />
-    protected override IEnumerable<SerializeCase> SerializeCases
-    {
-        get
-        {
-            yield return new SerializeCase(
-                "Default Serialization",
-                new FromSinger() { Stream = new StringConstant("Bar0") },
-                "FromSinger Stream: \"Bar0\" HandleState: (<> => Log Value: <>)"
-            );
-        }
-    }
+    ///// <inheritdoc />
+    //protected override IEnumerable<SerializeCase> SerializeCases
+    //{
+    //    get
+    //    {
+    //        yield return new SerializeCase(
+    //            "Default Serialization",
+    //            new FromSinger() { Stream = new StringConstant("Bar0") },
+    //            "FromSinger Stream: \"Bar0\" HandleState: (<> => Log Value: <>)"
+    //        );
+    //    }
+    //}
 }
 
 }

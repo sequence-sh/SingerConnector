@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -12,14 +13,12 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Json.Schema;
 using Reductech.EDR.Connectors.Singer.Errors;
-using Reductech.EDR.Connectors.StructuredData.Errors;
 using Reductech.EDR.Core;
 using Reductech.EDR.Core.Attributes;
 using Reductech.EDR.Core.Entities;
 using Reductech.EDR.Core.Enums;
 using Reductech.EDR.Core.Internal;
 using Reductech.EDR.Core.Internal.Errors;
-using Reductech.EDR.Core.Steps;
 using Reductech.EDR.Core.Util;
 using Entity = Reductech.EDR.Core.Entity;
 
@@ -67,9 +66,8 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
     /// How to handle the state
     /// </summary>
     [FunctionProperty(2)]
-    [DefaultValueExplanation("Log the state")]
-    public LambdaFunction<Entity, Unit> HandleState { get; set; } =
-        new(null, new Log<Entity>() { Value = new GetAutomaticVariable<Entity>() });
+    [DefaultValueExplanation("Writes the state to a file called State.Json")]
+    public LambdaFunction<Entity, Unit>? HandleState { get; set; } = null;
 
     /// <inheritdoc />
     public override IStepFactory StepFactory { get; } =
@@ -79,7 +77,7 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
         StringStream stringStream,
         IStep step,
         IStateMonad stateMonad,
-        LambdaFunction<Entity, Unit> handleState,
+        LambdaFunction<Entity, Unit>? handleState,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Dictionary<string, JsonSchema> schemaDict   = new();
@@ -113,25 +111,83 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
             }
             else if (result.Value is SingerState singerState)
             {
-                var stateEntity = CreateEntity(singerState.Value);
+                if (handleState is not null)
+                {
+                    var stateEntity = CreateEntity(singerState.Value);
 
-                var scopedMonad = new ScopedStateMonad(
-                    stateMonad,
-                    currentState,
-                    handleState.VariableNameOrItem,
-                    new KeyValuePair<VariableName, object>(
+                    var scopedMonad = new ScopedStateMonad(
+                        stateMonad,
+                        currentState,
                         handleState.VariableNameOrItem,
-                        stateEntity
-                    )
-                );
+                        new KeyValuePair<VariableName, object>(
+                            handleState.VariableNameOrItem,
+                            stateEntity
+                        )
+                    );
 
-                var handleStateResult =
-                    await handleState.StepTyped.Run(scopedMonad, cancellationToken);
+                    var handleStateResult =
+                        await handleState.StepTyped.Run(scopedMonad, cancellationToken);
 
-                if (handleStateResult.IsFailure)
-                    throw new ErrorException(handleStateResult.Error);
+                    if (handleStateResult.IsFailure)
+                        throw new ErrorException(handleStateResult.Error);
+                }
+                else
+                {
+                    var fileSystemResult =
+                        stateMonad.ExternalContext.TryGetContext<IFileSystem>(
+                            ConnectorInjection.FileSystemKey
+                        );
+
+                    if (fileSystemResult.IsFailure)
+                        throw new ErrorException(fileSystemResult.Error.WithLocation(step));
+
+                    var fullPath = fileSystemResult.Value.Path.Combine(
+                        fileSystemResult.Value.Directory.GetCurrentDirectory(),
+                        "State.json"
+                    );
+
+                    var stateJson = singerState.Value.ToString() ?? "";
+
+                    var writeFileResult = await WriteFileAsync(
+                        fileSystemResult.Value,
+                        fullPath,
+                        stateJson,
+                        cancellationToken
+                    );
+
+                    if (writeFileResult.IsFailure)
+                        throw new ErrorException(writeFileResult.Error.WithLocation(step));
+                }
             }
         }
+    }
+
+    private static async Task<Result<Unit, IErrorBuilder>> WriteFileAsync(
+        IFileSystem fileSystem,
+        string path,
+        string contents,
+        CancellationToken cancellationToken)
+    {
+        Maybe<IErrorBuilder> error;
+
+        try
+        {
+            await fileSystem.File.WriteAllTextAsync(path, contents, cancellationToken);
+            error = Maybe<IErrorBuilder>.None;
+        }
+        #pragma warning disable CA1031 // Do not catch general exception types
+        catch (Exception e)
+        {
+            error = Maybe<IErrorBuilder>.From(
+                ErrorCode.ExternalProcessError.ToErrorBuilder(e.Message)
+            );
+        }
+        #pragma warning restore CA1031 // Do not catch general exception types
+
+        if (error.HasValue)
+            return Result.Failure<Unit, IErrorBuilder>(error.Value);
+
+        return Unit.Default;
     }
 
     private static Entity CreateEntity(JsonElement element)
