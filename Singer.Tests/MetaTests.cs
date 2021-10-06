@@ -1,7 +1,7 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Reductech.EDR.Core.TestHarness;
 
-namespace Reductech.Templates.EDRConnector.Tests
+namespace Reductech.EDR.Connectors.Singer.Tests
 {
 
 /// <summary>

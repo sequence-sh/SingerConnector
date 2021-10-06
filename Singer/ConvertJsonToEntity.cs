@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ using Reductech.EDR.Core.Internal;
 using Reductech.EDR.Core.Internal.Errors;
 using Entity = Reductech.EDR.Core.Entity;
 
-namespace Reductech.Templates.EDRConnector
+namespace Reductech.EDR.Connectors.Singer
 {
 
 /// <summary>

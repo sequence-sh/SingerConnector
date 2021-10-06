@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Reductech.EDR.Core;
 using Reductech.EDR.Core.Internal.Errors;
 using Reductech.EDR.Core.TestHarness;
 
-namespace Reductech.Templates.EDRConnector.Tests
+namespace Reductech.EDR.Connectors.Singer.Tests
 {
 
 public partial class FromJsonTests : StepTestBase<ConvertJsonToEntity, Entity>
