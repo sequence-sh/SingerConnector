@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Reductech.EDR.Connectors.Singer.Errors;
 using Reductech.EDR.Core;
 using Reductech.EDR.Core.Internal;
@@ -23,7 +24,8 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 {""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 2}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
 ";
 
-            var step = IngestAndLogAll(testData);
+            var expectedStatePath = Path.DirectorySeparatorChar + "State.json";
+            var step              = IngestAndLogAll(testData);
 
             yield return new StepCase(
                     "Read Singer Data",
@@ -32,7 +34,7 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
                     "('a': 1)",
                     "('a': 2)"
                 ).WithFileSystem()
-                .WithExpectedFileSystem(new[] { ("\\State.json", "{}") });
+                .WithExpectedFileSystem(new[] { (stateOnlyPath: expectedStatePath, "{}") });
         }
     }
 
