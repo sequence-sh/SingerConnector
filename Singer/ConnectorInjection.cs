@@ -15,7 +15,7 @@ public sealed class ConnectorInjection : IConnectorInjection
     /// <summary>
     /// The key for FileSystem injection
     /// </summary>
-    public const string FileSystemKey = "FileSystem.FileSystem";
+    public const string FileSystemKey = "Singer.FileSystem";
 
     /// <inheritdoc />
     public Result<IReadOnlyCollection<(string Name, object Context)>, IErrorBuilder>

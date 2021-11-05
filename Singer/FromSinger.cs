@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,7 +14,6 @@ using Json.Schema;
 using Reductech.EDR.Connectors.Singer.Errors;
 using Reductech.EDR.Core;
 using Reductech.EDR.Core.Attributes;
-using Reductech.EDR.Core.Entities;
 using Reductech.EDR.Core.Enums;
 using Reductech.EDR.Core.Internal;
 using Reductech.EDR.Core.Internal.Errors;
@@ -107,13 +105,13 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
                         );
                 }
 
-                yield return CreateEntity(singerRecord.Record);
+                yield return Entity.Create(singerRecord.Record);
             }
             else if (result.Value is SingerState singerState)
             {
                 if (handleState is not null)
                 {
-                    var stateEntity = CreateEntity(singerState.Value);
+                    var stateEntity = Entity.Create(singerState.Value);
 
                     var scopedMonad = new ScopedStateMonad(
                         stateMonad,
@@ -188,56 +186,6 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
             return Result.Failure<Unit, IErrorBuilder>(error.Value);
 
         return Unit.Default;
-    }
-
-    private static Entity CreateEntity(JsonElement element)
-    {
-        var ev = CreateEntityValue(element);
-
-        if (ev is EntityValue.NestedEntity nestedEntity)
-            return nestedEntity.Value;
-
-        return new Entity(
-            ImmutableDictionary<string, EntityProperty>.Empty
-                .Add(Entity.PrimitiveKey, new EntityProperty(Entity.PrimitiveKey, ev, null, 0))
-        );
-    }
-
-    private static EntityValue CreateEntityValue(JsonElement element)
-    {
-        switch (element.ValueKind)
-        {
-            case JsonValueKind.Undefined: return EntityValue.Null.Instance;
-            case JsonValueKind.Object:
-            {
-                var dict = element.EnumerateObject()
-                    .Select(
-                        (x, i) =>
-                            new EntityProperty(x.Name, CreateEntityValue(x.Value), null, i)
-                    )
-                    .ToImmutableDictionary(x => x.Name);
-
-                var entity = new Entity(dict);
-                return new EntityValue.NestedEntity(entity);
-            }
-            case JsonValueKind.Array:
-            {
-                var list = element.EnumerateArray().Select(CreateEntityValue).ToImmutableList();
-                return new EntityValue.NestedList(list);
-            }
-            case JsonValueKind.String: return new EntityValue.String(element.GetString()!);
-            case JsonValueKind.Number:
-            {
-                if (element.TryGetInt32(out var i))
-                    return new EntityValue.Integer(i);
-
-                return new EntityValue.Double(element.GetDouble());
-            }
-            case JsonValueKind.True: return new EntityValue.Boolean(true);
-            case JsonValueKind.False: return new EntityValue.Boolean(false);
-            case JsonValueKind.Null: return EntityValue.Null.Instance;
-            default: throw new ArgumentOutOfRangeException(element.ValueKind.ToString());
-        }
     }
 
     private static async IAsyncEnumerable<Result<SingerObject, IErrorBuilder>> ReadSingerStream(
