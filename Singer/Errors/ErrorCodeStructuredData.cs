@@ -2,8 +2,7 @@
 using Reductech.EDR.Connectors.StructuredData.Errors;
 using Reductech.EDR.Core.Internal.Errors;
 
-namespace Reductech.EDR.Connectors.Singer.Errors
-{
+namespace Reductech.EDR.Connectors.Singer.Errors;
 
 /// <summary>
 /// Identifying code for an error message in Structured Data
@@ -36,6 +35,4 @@ public sealed record ErrorCodeStructuredData : ErrorCodeBase
     public static readonly ErrorCodeStructuredData SchemaViolation = new(nameof(SchemaViolation));
 
 #endregion Cases
-}
-
 }

@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Reductech.EDR.Connectors.Singer.Errors;
-using Reductech.EDR.Core;
-using Reductech.EDR.Core.Internal;
 using Reductech.EDR.Core.Steps;
-using Reductech.EDR.Core.TestHarness;
-using Reductech.EDR.Core.Util;
 
-namespace Reductech.EDR.Connectors.Singer.Tests
-{
+namespace Reductech.EDR.Connectors.Singer.Tests;
 
 public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 {
@@ -95,6 +89,4 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
     //        );
     //    }
     //}
-}
-
 }

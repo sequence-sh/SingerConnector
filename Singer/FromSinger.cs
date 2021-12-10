@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Immutable;
 using System.IO;
 using System.IO.Abstractions;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
 using Json.Schema;
 using Reductech.EDR.Connectors.Singer.Errors;
-using Reductech.EDR.Core;
-using Reductech.EDR.Core.Attributes;
 using Reductech.EDR.Core.Enums;
-using Reductech.EDR.Core.Internal;
 using Reductech.EDR.Core.Internal.Errors;
-using Reductech.EDR.Core.Util;
 using Entity = Reductech.EDR.Core.Entity;
 
-namespace Reductech.EDR.Connectors.Singer
-{
+namespace Reductech.EDR.Connectors.Singer;
 
 /// <summary>
 /// Extracts the data from a Singer Tap and converts it to entities
@@ -328,5 +317,3 @@ public sealed class SingerState : SingerObject
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning restore 8618
-
-}

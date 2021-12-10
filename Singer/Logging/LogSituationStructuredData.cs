@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 using Reductech.EDR.Connectors.StructuredData.Logging;
 using Reductech.EDR.Core.Internal.Logging;
 
-namespace Reductech.EDR.Connectors.Singer.Logging
-{
+namespace Reductech.EDR.Connectors.Singer.Logging;
 
 /// <summary>
 /// Identifying code for a Core log situation.
@@ -30,6 +29,4 @@ public sealed record LogSituationStructuredData : LogSituationBase
         nameof(SingerState),
         LogLevel.Debug
     );
-}
-
 }
