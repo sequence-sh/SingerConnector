@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using FluentAssertions;
 using Reductech.EDR.Core.Abstractions;
-using Reductech.EDR.Core.TestHarness;
 
-namespace Reductech.EDR.Connectors.Singer.Tests
-{
+namespace Reductech.EDR.Connectors.Singer.Tests;
 
 public static class Extensions
 {
@@ -110,6 +106,4 @@ public static class Extensions
             return s;
         }
     }
-}
-
 }
