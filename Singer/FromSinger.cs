@@ -106,7 +106,7 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
                         stateMonad,
                         currentState,
                         handleState.VariableNameOrItem,
-                        new KeyValuePair<VariableName, object>(
+                        new KeyValuePair<VariableName, ISCLObject>(
                             handleState.VariableNameOrItem,
                             stateEntity
                         )
