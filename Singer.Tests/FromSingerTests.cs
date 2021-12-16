@@ -36,10 +36,10 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
     {
         var step = new ForEach<Entity>()
         {
-            Array = new FromSinger() { Stream = new StringConstant(text.Trim()) },
+            Array = new FromSinger() { Stream = new SCLConstant<StringStream>(text.Trim()) },
             Action = new LambdaFunction<Entity, Unit>(
                 null,
-                new Log<Entity>() { Value = new GetAutomaticVariable<Entity>() }
+                new Log() { Value = new GetAutomaticVariable<Entity>() }
             )
         };
 
