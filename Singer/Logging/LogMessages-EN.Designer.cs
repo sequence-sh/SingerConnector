@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Reductech.EDR.Connectors.StructuredData.Logging {
+namespace Reductech.Sequence.Connectors.StructuredData.Logging {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Reductech.EDR.Connectors.StructuredData.Logging {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reductech.EDR.Connectors.StructuredData.Logging.LogMessages-EN", typeof(LogMessages_EN).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reductech.Sequence.Connectors.StructuredData.Logging.LogMessages-EN", typeof(LogMessages_EN).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

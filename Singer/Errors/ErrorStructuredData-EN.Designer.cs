@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Reductech.EDR.Connectors.StructuredData.Errors {
+namespace Reductech.Sequence.Connectors.StructuredData.Errors {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Reductech.EDR.Connectors.StructuredData.Errors {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reductech.EDR.Connectors.StructuredData.Errors.ErrorStructuredData-EN", typeof(ErrorStructuredData_EN).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Reductech.Sequence.Connectors.StructuredData.Errors.ErrorStructuredData-EN", typeof(ErrorStructuredData_EN).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
