@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Reductech.EDR.Connectors.Singer.Errors;
-using Reductech.EDR.Core.Steps;
+using Reductech.Sequence.Connectors.Singer.Errors;
+using Reductech.Sequence.Core.Steps;
 
-namespace Reductech.EDR.Connectors.Singer.Tests;
+namespace Reductech.Sequence.Connectors.Singer.Tests;
 
 public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 {

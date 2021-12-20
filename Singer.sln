@@ -1,11 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Singer", "Singer\Singer.csproj", "{160C9E0E-BC58-444A-A303-4FFA6500127B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Singer", "Singer\Singer.csproj", "{160C9E0E-BC58-444A-A303-4FFA6500127B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Singer.Tests", "Singer.Tests\Singer.Tests.csproj", "{E3176F7C-A766-4573-A3CD-4234C219D5CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Singer.Tests", "Singer.Tests\Singer.Tests.csproj", "{E3176F7C-A766-4573-A3CD-4234C219D5CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FC131D7-B1EA-45D4-99AE-D8D8239604C4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.gitlab-ci.yml = .gitlab-ci.yml
+		.gitlab\issue_templates\Bug.md = .gitlab\issue_templates\Bug.md
+		CHANGELOG.md = CHANGELOG.md
+		codecov.yml = codecov.yml
+		.gitlab\issue_templates\Feature.md = .gitlab\issue_templates\Feature.md
+		LICENSE = LICENSE
+		README.md = README.md
+		Singer.sln.DotSettings = Singer.sln.DotSettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{160C9E0E-BC58-444A-A303-4FFA6500127B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,5 +55,11 @@ Global
 		{E3176F7C-A766-4573-A3CD-4234C219D5CF}.Release|x64.Build.0 = Release|Any CPU
 		{E3176F7C-A766-4573-A3CD-4234C219D5CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{E3176F7C-A766-4573-A3CD-4234C219D5CF}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54AD52C7-5FE7-4955-94F6-4BC6A4BBDC58}
 	EndGlobalSection
 EndGlobal

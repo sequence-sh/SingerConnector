@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using Reductech.EDR.Connectors.StructuredData.Errors;
-using Reductech.EDR.Core.Internal.Errors;
+using Reductech.Sequence.Connectors.StructuredData.Errors;
+using Reductech.Sequence.Core.Internal.Errors;
 
-namespace Reductech.EDR.Connectors.Singer.Errors;
+namespace Reductech.Sequence.Connectors.Singer.Errors;
 
 /// <summary>
 /// Identifying code for an error message in Structured Data

@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Json.Schema;
-using Reductech.EDR.Connectors.Singer.Errors;
-using Reductech.EDR.Core.Enums;
-using Reductech.EDR.Core.Internal.Errors;
-using Entity = Reductech.EDR.Core.Entity;
+using Reductech.Sequence.Connectors.Singer.Errors;
+using Reductech.Sequence.Core.Enums;
+using Reductech.Sequence.Core.Internal.Errors;
+using Entity = Reductech.Sequence.Core.Entity;
 
-namespace Reductech.EDR.Connectors.Singer;
+namespace Reductech.Sequence.Connectors.Singer;
 
 /// <summary>
 /// Extracts the data from a Singer Tap and converts it to entities

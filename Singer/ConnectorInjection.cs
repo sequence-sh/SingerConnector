@@ -1,8 +1,8 @@
 ﻿using System.IO.Abstractions;
-using Reductech.EDR.Core.Connectors;
-using Reductech.EDR.Core.Internal.Errors;
+using Reductech.Sequence.Core.Connectors;
+using Reductech.Sequence.Core.Internal.Errors;
 
-namespace Reductech.EDR.Connectors.Singer;
+namespace Reductech.Sequence.Connectors.Singer;
 
 /// <summary>
 /// For injecting the connector context

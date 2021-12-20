@@ -4,23 +4,23 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RootNamespace>Reductech.EDR.Connectors.Singer</RootNamespace>
-    <AssemblyName>Reductech.EDR.Connectors.Singer</AssemblyName>
+    <RootNamespace>Reductech.Sequence.Connectors.Singer</RootNamespace>
+    <AssemblyName>Reductech.Sequence.Connectors.Singer</AssemblyName>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
     <Version>0.13.0$(VersionSuffix)</Version>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Reductech.EDR.Connectors.Singer</PackageId>
-    <Title>EDR Singer Connector</Title>
-    <Description>A class library for using Singer in EDR Sequences</Description>
-    <Product>EDR</Product>
-    <PackageTags>ediscovery;forensics;edrm;automation;orchestration</PackageTags>
+    <PackageId>Reductech.Sequence.Connectors.Singer</PackageId>
+    <Title>Sequence® Singer Connector</Title>
+    <Description>Connector that enables Sequence® to act as a Singer target.</Description>
+    <Product>Sequence®</Product>
+    <PackageTags>ediscovery;forensics;edrm;automation;orchestration;sequence</PackageTags>
 
-    <PackageProjectUrl>https://gitlab.com/reductech/edr/connectors/singer</PackageProjectUrl>
-    <RepositoryUrl>https://gitlab.com/reductech/edr/connectors/singer.git</RepositoryUrl>
-    <PackageReleaseNotes>Please see https://gitlab.com/reductech/edr/connectors/singer/-/releases</PackageReleaseNotes>
+    <PackageProjectUrl>https://gitlab.com/reductech/sequence/connectors/singer</PackageProjectUrl>
+    <RepositoryUrl>https://gitlab.com/reductech/sequence/connectors/singer.git</RepositoryUrl>
+    <PackageReleaseNotes>Please see https://gitlab.com/reductech/sequence/connectors/singer/-/releases</PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 
     <Authors>Reductech</Authors>
@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="JsonSchema.Net" Version="1.12.0" />
-    <PackageReference Include="Reductech.EDR.Core" Version="0.13.0-a.main.2112200210">
+    <PackageReference Include="Reductech.Sequence.Core" Version="0.13.0-a.main.2112201532">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
