@@ -1,6 +1,6 @@
 # Sequence® Singer Connector
 
-[Reductech Sequence®](https://gitlab.com/reductech/sequence) is a collection of
+[Sequence®](https://gitlab.com/reductech/sequence) is a collection of
 libraries that automates cross-application e-discovery and forensic workflows.
 
 This connector allows Sequence to act as a Singer target, converting data that
