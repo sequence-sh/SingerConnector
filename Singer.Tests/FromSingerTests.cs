@@ -1,7 +1,7 @@
 ﻿using System.IO;
+using System.Text.Json;
 using Reductech.Sequence.Connectors.Singer.Errors;
 using Reductech.Sequence.Core.Steps;
-using static Reductech.Sequence.Core.TestHarness.StaticHelpers;
 
 namespace Reductech.Sequence.Connectors.Singer.Tests;
 
@@ -60,7 +60,7 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
         }
     }
 
-    public static IStep<Unit> IngestAndLogAll(string text)
+    public static ForEach<Entity> IngestAndLogAll(string text)
     {
         var step = new ForEach<Entity>()
         {
@@ -93,14 +93,57 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 ";
 
             var step           = IngestAndLogAll(testDataWithWrongSchema);
-            var fromSingerStep = (step as ForEach<Entity>)!.Array;
+            var fromSingerStep = step.Array;
 
             yield return new ErrorCase(
                 "Bad Schema",
                 step,
-                ErrorCodeStructuredData.SchemaViolation
+                ErrorCode_Singer.SchemaViolation
                     .ToErrorBuilder("Unknown Violation")
                     .WithLocationSingle(fromSingerStep)
+            ).WithFileSystem();
+
+            yield return new ErrorCase(
+                "No File System",
+                step,
+                ErrorCode.MissingContext.ToErrorBuilder("IFileSystem")
+                    .WithLocationSingle(step.Array)
+            );
+
+            var schemaViolationData = @"
+{""type"": ""STATE"",  ""value"": {}}
+{""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""b"": {""type"": ""number""}}}, ""key_properties"": [""b""]}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": ""Some Beautiful Text""}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+";
+
+            var schemaViolationStep = IngestAndLogAll(schemaViolationData);
+
+            yield return new ErrorCase(
+                "Data violates schema",
+                schemaViolationStep,
+                ErrorCode_Singer.SchemaViolation.ToErrorBuilder("Unknown Violation")
+                    .WithLocationSingle(schemaViolationStep.Array)
+            ).WithFileSystem();
+
+            var malformedData = @"
+{""type"": ""STATE"",  ""value"": {}}
+{""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""b"": {""type"": ""number""}}}, ""key_properties"": [""b""]}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+
+";
+
+            var malformedDataStep = IngestAndLogAll(malformedData);
+
+            yield return new ErrorCase(
+                "Data is malformed",
+                malformedDataStep,
+                ErrorCode_Singer.JsonParseError.ToErrorBuilder(
+                        new JsonException(
+                            "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 104."
+                        )
+                    )
+                    .WithLocationSingle(malformedDataStep.Array)
             ).WithFileSystem();
         }
     }

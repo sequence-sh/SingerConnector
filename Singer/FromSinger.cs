@@ -88,7 +88,7 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
 
                     if (!validationResult.IsValid)
                         throw new ErrorException(
-                            ErrorCodeStructuredData.SchemaViolation
+                            ErrorCode_Singer.SchemaViolation
                                 .ToErrorBuilder(message)
                                 .WithLocationSingle(step)
                         );
@@ -193,16 +193,23 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
 
             if (!string.IsNullOrWhiteSpace(line))
             {
-                var obj = JsonSerializer.Deserialize<SingerObject>(line, options);
+                Result<SingerObject, IErrorBuilder> result;
 
-                if (obj is null)
+                try
                 {
-                    yield return ErrorCode.CouldNotParse.ToErrorBuilder(line, nameof(SingerObject));
+                    var obj = JsonSerializer.Deserialize<SingerObject>(line, options);
+
+                    if (obj is null)
+                        result = ErrorCode.CouldNotParse.ToErrorBuilder(line, nameof(SingerObject));
+                    else
+                        result = obj;
                 }
-                else
+                catch (JsonException e)
                 {
-                    yield return obj;
+                    result = ErrorCode_Singer.JsonParseError.ToErrorBuilder(e);
                 }
+
+                yield return result;
             }
         }
     }
@@ -226,29 +233,29 @@ public class SingerJsonConverter : JsonConverter<SingerObject>
         Type typeToConvert,
         JsonSerializerOptions options)
     {
-        Utf8JsonReader readerClone = reader;
+        var readerClone = reader;
 
         if (readerClone.TokenType != JsonTokenType.StartObject)
-            throw new JsonException();
+            throw new JsonException($"Expected {JsonTokenType.StartObject}");
 
         readerClone.Read();
 
         if (readerClone.TokenType != JsonTokenType.PropertyName)
-            throw new JsonException();
+            throw new JsonException($"Expected {JsonTokenType.PropertyName}");
 
         var propertyName = readerClone.GetString();
 
         if (propertyName is null
          || !propertyName.Equals("Type", StringComparison.OrdinalIgnoreCase))
         {
-            throw new JsonException();
+            throw new JsonException("First Property should be 'Type'");
         }
 
         readerClone.Read();
 
         if (readerClone.TokenType != JsonTokenType.String)
         {
-            throw new JsonException();
+            throw new JsonException("'Type' should be a string");
         }
 
         var typeName = readerClone.GetString()!.ToLowerInvariant();
@@ -258,7 +265,9 @@ public class SingerJsonConverter : JsonConverter<SingerObject>
             "schema" => JsonSerializer.Deserialize<SingerSchema>(ref reader)!,
             "record" => JsonSerializer.Deserialize<SingerRecord>(ref reader)!,
             "state"  => JsonSerializer.Deserialize<SingerState>(ref reader)!,
-            _        => throw new JsonException()
+            _ => throw new JsonException(
+                $"Expected 'schema', 'record', or 'state'. Got '{typeName}'"
+            )
         };
 
         return singerObject;
