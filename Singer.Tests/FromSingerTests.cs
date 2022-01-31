@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Reductech.Sequence.Connectors.Singer.Errors;
 using Reductech.Sequence.Core.Steps;
+using static Reductech.Sequence.Core.TestHarness.StaticHelpers;
 
 namespace Reductech.Sequence.Connectors.Singer.Tests;
 
@@ -11,15 +12,15 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
     {
         get
         {
-            const string testData = @"
-{""type"": ""STATE"",  ""value"": {}}
+            const string testData1 = @"
+{""type"": ""STATE"",  ""value"": {""StateValue"": 1}}
 {""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""a"": {""type"": ""number""}}}, ""key_properties"": [""a""]}
 {""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
 {""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 2}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
 ";
 
             var expectedStatePath = Path.DirectorySeparatorChar + "State.json";
-            var step              = IngestAndLogAll(testData);
+            var step              = IngestAndLogAll(testData1);
 
             yield return new StepCase(
                     "Read Singer Data",
@@ -28,7 +29,34 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
                     "('a': 1)",
                     "('a': 2)"
                 ).WithFileSystem()
-                .WithExpectedFileSystem(new[] { (stateOnlyPath: expectedStatePath, "{}") });
+                .WithExpectedFileSystem(
+                    new[] { (stateOnlyPath: expectedStatePath, "{\"StateValue\": 1}") }
+                );
+
+            yield return new StepCase(
+                    "Read Singer Data with HandleState",
+                    new ForEach<Entity>()
+                    {
+                        Array = new FromSinger()
+                        {
+                            Stream = new SCLConstant<StringStream>(testData1.Trim()),
+                            HandleState = new LambdaFunction<Entity, Unit>(
+                                null,
+                                new Log() { Value = new GetAutomaticVariable<Entity>() }
+                            )
+                        },
+                        Action = new LambdaFunction<Entity, Unit>(
+                            null,
+                            new Log() { Value = new GetAutomaticVariable<Entity>() }
+                        ),
+                    },
+                    Unit.Default,
+                    "('StateValue': 1)",
+                    "('a': 1)",
+                    "('a': 2)"
+                ).WithFileSystem()
+                //.WithExpectedFileSystem(new[] { (stateOnlyPath: expectedStatePath, "{\"StateValue\": 1}") })
+                ;
         }
     }
 

@@ -251,7 +251,7 @@ public class SingerJsonConverter : JsonConverter<SingerObject>
             throw new JsonException();
         }
 
-        string typeName = readerClone.GetString()!.ToLowerInvariant();
+        var typeName = readerClone.GetString()!.ToLowerInvariant();
 
         SingerObject singerObject = typeName switch
         {
