@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Reductech.Sequence.Connectors.StructuredData.Errors;
 using Reductech.Sequence.Core.Internal.Errors;
 
 namespace Reductech.Sequence.Connectors.Singer.Errors;
@@ -7,15 +6,14 @@ namespace Reductech.Sequence.Connectors.Singer.Errors;
 /// <summary>
 /// Identifying code for an error message in Structured Data
 /// </summary>
-public sealed record ErrorCodeStructuredData : ErrorCodeBase
+public sealed record ErrorCode_Singer : ErrorCodeBase
 {
-    private ErrorCodeStructuredData(string code) : base(code) { }
+    private ErrorCode_Singer(string code) : base(code) { }
 
     /// <inheritdoc />
     public override string GetFormatString()
     {
-        var localizedMessage =
-            ErrorStructuredData_EN.ResourceManager.GetString(Code);
+        var localizedMessage = ErrorSinger_EN.ResourceManager.GetString(Code);
 
         Debug.Assert(localizedMessage != null, nameof(localizedMessage) + " != null");
         return localizedMessage;
@@ -32,7 +30,12 @@ public sealed record ErrorCodeStructuredData : ErrorCodeBase
     /// <summary>
     /// Schema Violation: {0}
     /// </summary>
-    public static readonly ErrorCodeStructuredData SchemaViolation = new(nameof(SchemaViolation));
+    public static readonly ErrorCode_Singer SchemaViolation = new(nameof(SchemaViolation));
+
+    /// <summary>
+    /// Json Parse Error: {0}
+    /// </summary>
+    public static readonly ErrorCode_Singer JsonParseError = new(nameof(JsonParseError));
 
 #endregion Cases
 }

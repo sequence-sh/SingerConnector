@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SingerState" xml:space="preserve">
-    <value>SingerState: {State}</value>
+  <data name="JsonParseError" xml:space="preserve">
+    <value>Json Parse Error: {0}</value>
+  </data>
+  <data name="SchemaViolation" xml:space="preserve">
+    <value>Schema Violation: {0}</value>
   </data>
 </root>

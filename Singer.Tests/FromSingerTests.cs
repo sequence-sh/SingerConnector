@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.Json;
 using Reductech.Sequence.Connectors.Singer.Errors;
 using Reductech.Sequence.Core.Steps;
 
@@ -11,15 +12,15 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
     {
         get
         {
-            const string testData = @"
-{""type"": ""STATE"",  ""value"": {}}
+            const string testData1 = @"
+{""type"": ""STATE"",  ""value"": {""StateValue"": 1}}
 {""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""a"": {""type"": ""number""}}}, ""key_properties"": [""a""]}
 {""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
 {""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 2}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
 ";
 
             var expectedStatePath = Path.DirectorySeparatorChar + "State.json";
-            var step              = IngestAndLogAll(testData);
+            var step              = IngestAndLogAll(testData1);
 
             yield return new StepCase(
                     "Read Singer Data",
@@ -28,11 +29,38 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
                     "('a': 1)",
                     "('a': 2)"
                 ).WithFileSystem()
-                .WithExpectedFileSystem(new[] { (stateOnlyPath: expectedStatePath, "{}") });
+                .WithExpectedFileSystem(
+                    new[] { (stateOnlyPath: expectedStatePath, "{\"StateValue\": 1}") }
+                );
+
+            yield return new StepCase(
+                    "Read Singer Data with HandleState",
+                    new ForEach<Entity>()
+                    {
+                        Array = new FromSinger()
+                        {
+                            Stream = new SCLConstant<StringStream>(testData1.Trim()),
+                            HandleState = new LambdaFunction<Entity, Unit>(
+                                null,
+                                new Log() { Value = new GetAutomaticVariable<Entity>() }
+                            )
+                        },
+                        Action = new LambdaFunction<Entity, Unit>(
+                            null,
+                            new Log() { Value = new GetAutomaticVariable<Entity>() }
+                        ),
+                    },
+                    Unit.Default,
+                    "('StateValue': 1)",
+                    "('a': 1)",
+                    "('a': 2)"
+                ).WithFileSystem()
+                //.WithExpectedFileSystem(new[] { (stateOnlyPath: expectedStatePath, "{\"StateValue\": 1}") })
+                ;
         }
     }
 
-    public static IStep<Unit> IngestAndLogAll(string text)
+    public static ForEach<Entity> IngestAndLogAll(string text)
     {
         var step = new ForEach<Entity>()
         {
@@ -65,14 +93,57 @@ public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 ";
 
             var step           = IngestAndLogAll(testDataWithWrongSchema);
-            var fromSingerStep = (step as ForEach<Entity>)!.Array;
+            var fromSingerStep = step.Array;
 
             yield return new ErrorCase(
                 "Bad Schema",
                 step,
-                ErrorCodeStructuredData.SchemaViolation
+                ErrorCode_Singer.SchemaViolation
                     .ToErrorBuilder("Unknown Violation")
                     .WithLocationSingle(fromSingerStep)
+            ).WithFileSystem();
+
+            yield return new ErrorCase(
+                "No File System",
+                step,
+                ErrorCode.MissingContext.ToErrorBuilder("IFileSystem")
+                    .WithLocationSingle(step.Array)
+            );
+
+            var schemaViolationData = @"
+{""type"": ""STATE"",  ""value"": {}}
+{""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""b"": {""type"": ""number""}}}, ""key_properties"": [""b""]}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": ""Some Beautiful Text""}, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+";
+
+            var schemaViolationStep = IngestAndLogAll(schemaViolationData);
+
+            yield return new ErrorCase(
+                "Data violates schema",
+                schemaViolationStep,
+                ErrorCode_Singer.SchemaViolation.ToErrorBuilder("Unknown Violation")
+                    .WithLocationSingle(schemaViolationStep.Array)
+            ).WithFileSystem();
+
+            var malformedData = @"
+{""type"": ""STATE"",  ""value"": {}}
+{""type"": ""SCHEMA"", ""stream"": ""test"", ""schema"": {""type"": ""object"", ""additionalProperties"": false, ""properties"": {""b"": {""type"": ""number""}}}, ""key_properties"": [""b""]}
+{""type"": ""RECORD"", ""stream"": ""test"", ""record"": {""a"": 1, ""time_extracted"": ""2021-10-04T15:13:38.301481Z""}
+
+";
+
+            var malformedDataStep = IngestAndLogAll(malformedData);
+
+            yield return new ErrorCase(
+                "Data is malformed",
+                malformedDataStep,
+                ErrorCode_Singer.JsonParseError.ToErrorBuilder(
+                        new JsonException(
+                            "Expected depth to be zero at the end of the JSON payload. There is an open JSON object or array that should be closed. Path: $ | LineNumber: 0 | BytePositionInLine: 104."
+                        )
+                    )
+                    .WithLocationSingle(malformedDataStep.Array)
             ).WithFileSystem();
         }
     }
