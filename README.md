@@ -21,6 +21,10 @@ tap-slack --config C:\Singer\slack.config --catalog C:\Singer\catalog.json |
     .\sequence run scl "ReadStandardIn | FromSinger handlestate: (<>=>DoNothing) | Foreach (log <>['name'])"
 ```
 
+# Documentation
+
+Documentation available at https://sequence.sh
+
 # Releases
 
 Can be downloaded from the [Releases page](https://gitlab.com/reductech/sequence/connectors/singer/-/releases).

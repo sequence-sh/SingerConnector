@@ -1,3 +1,13 @@
+# v0.14.0 (2022-03-25)
+
+Maintenance release - dependency updates only.
+
+## Issues Closed in this Release
+
+### Maintenance
+
+- Add more tests to improve code coverage #24
+
 # v0.13.0 (2022-01-16)
 
 EDR is now Sequence. The following has changed:
@@ -37,5 +47,6 @@ Initial release. Version numbers are aligned with [Core](https://gitlab.com/redu
 ### Maintenance
 
 - Update version of Core #2
+
 
 
