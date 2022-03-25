@@ -1,8 +1,10 @@
 # v0.14.0 (2022-03-25)
 
+Maintenance release - dependency updates only.
+
 ## Issues Closed in this Release
 
-### Other
+### Maintenance
 
 - Add more tests to improve code coverage #24
 
