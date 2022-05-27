@@ -1,3 +1,7 @@
+# v0.15.0 (2022-05-27)
+
+Maintenance release - dependency updates only.
+
 # v0.14.0 (2022-03-25)
 
 Maintenance release - dependency updates only.
@@ -47,6 +51,7 @@ Initial release. Version numbers are aligned with [Core](https://gitlab.com/redu
 ### Maintenance
 
 - Update version of Core #2
+
 
 
 
