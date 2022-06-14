@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="JsonSchema.Net" Version="1.13.0" />
-    <PackageReference Include="Reductech.Sequence.Core" Version="0.16.0-a.main.2206130111">
+    <PackageReference Include="Reductech.Sequence.Core" Version="0.16.0-a.main.2206131338">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
