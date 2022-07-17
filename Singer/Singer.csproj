@@ -14,31 +14,51 @@
   <PropertyGroup>
     <PackageId>Reductech.Sequence.Connectors.Singer</PackageId>
     <Title>Sequence® Singer Connector</Title>
-    <Description>Connector that enables Sequence® to act as a Singer target.</Description>
+    <Description>Singer target for Sequence.</Description>
     <Product>Sequence®</Product>
-    <PackageTags>ediscovery;forensics;edrm;automation;orchestration;sequence</PackageTags>
+    <PackageTags>ediscovery;forensics;edrm;automation;orchestration;sequence;singer;etl;target;</PackageTags>
 
-    <PackageProjectUrl>https://gitlab.com/reductech/sequence/connectors/singer</PackageProjectUrl>
+    <PackageProjectUrl>https://sequence.sh</PackageProjectUrl>
     <RepositoryUrl>https://gitlab.com/reductech/sequence/connectors/singer.git</RepositoryUrl>
     <PackageReleaseNotes>https://gitlab.com/reductech/sequence/connectors/singer/-/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <Authors>Reductech</Authors>
     <Company>Reductech</Company>
     <Copyright>Copyright (c) 2022 Reductech Ltd</Copyright>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(CI)' != ''">
+    <!-- deterministic builds for Source Link -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Source Link and symbols -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../CHANGELOG.md" Pack="true" PackagePath="/" />
+    <None Include="../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="../NOTICE" Pack="true" PackagePath="/" />
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="JsonSchema.Net" Version="1.13.0" />
-    <PackageReference Include="Reductech.Sequence.Core" Version="0.16.0-a.main.2207111038">
+    <PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.1.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Reductech.Sequence.Core" Version="0.16.0">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(PackConnector) != ''">
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,7 +78,6 @@
 
   <PropertyGroup Condition="$(PackConnector) != ''">
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageLicenseExpression></PackageLicenseExpression>
   </PropertyGroup>
