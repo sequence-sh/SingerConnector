@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonSchema.Net" Version="1.13.0" />
     <PackageReference Include="Microsoft.SourceLink.GitLab" Version="1.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -58,7 +57,7 @@
     <PackageReference Include="Reductech.Sequence.Core" Version="0.17.0-a.main.2208051532">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="System.IO.Abstractions" Version="14.0.13" />
+    <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
   </ItemGroup>
 
   <ItemGroup>
