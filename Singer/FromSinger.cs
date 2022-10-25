@@ -18,7 +18,7 @@ namespace Reductech.Sequence.Connectors.Singer;
 public sealed class FromSinger : CompoundStep<Array<Entity>>
 {
     /// <inheritdoc />
-    protected override async Task<Result<Array<Entity>, IError>> Run(
+    protected override async ValueTask<Result<Array<Entity>, IError>> Run(
         IStateMonad stateMonad,
         CancellationToken cancellationToken)
     {
@@ -162,14 +162,12 @@ public sealed class FromSinger : CompoundStep<Array<Entity>>
             await fileSystem.File.WriteAllTextAsync(path, contents, cancellationToken);
             error = Maybe<IErrorBuilder>.None;
         }
-        #pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception e)
         {
             error = Maybe<IErrorBuilder>.From(
                 ErrorCode.ExternalProcessError.ToErrorBuilder(e.Message)
             );
         }
-        #pragma warning restore CA1031 // Do not catch general exception types
 
         if (error.HasValue)
             return Result.Failure<Unit, IErrorBuilder>(error.Value);
