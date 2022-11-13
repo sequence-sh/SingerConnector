@@ -3,9 +3,9 @@ using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using FluentAssertions;
-using Reductech.Sequence.Core.Abstractions;
+using Sequence.Core.Abstractions;
 
-namespace Reductech.Sequence.Connectors.Singer.Tests;
+namespace Sequence.Connectors.Singer.Tests;
 
 public static class Extensions
 {

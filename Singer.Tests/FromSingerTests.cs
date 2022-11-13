@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Text.Json;
-using Reductech.Sequence.Connectors.Singer.Errors;
-using Reductech.Sequence.Core.Steps;
+using Sequence.Connectors.Singer.Errors;
+using Sequence.Core.Steps;
 
-namespace Reductech.Sequence.Connectors.Singer.Tests;
+namespace Sequence.Connectors.Singer.Tests;
 
 public partial class FromSingerTests : StepTestBase<FromSinger, Array<Entity>>
 {

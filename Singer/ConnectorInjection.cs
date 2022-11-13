@@ -1,8 +1,8 @@
 ﻿using System.IO.Abstractions;
-using Reductech.Sequence.Core.Connectors;
-using Reductech.Sequence.Core.Internal.Errors;
+using Sequence.Core.Connectors;
+using Sequence.Core.Internal.Errors;
 
-namespace Reductech.Sequence.Connectors.Singer;
+namespace Sequence.Connectors.Singer;
 
 /// <summary>
 /// For injecting the connector context

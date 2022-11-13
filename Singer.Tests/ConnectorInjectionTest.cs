@@ -3,7 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Xunit;
 
-namespace Reductech.Sequence.Connectors.Singer.Tests;
+namespace Sequence.Connectors.Singer.Tests;
 
 public class ConnectorInjectionTest
 {
