@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Reductech.Sequence.Connectors.Singer.Tests;
+namespace Sequence.Connectors.Singer.Tests;
 
 /// <summary>
 /// Makes sure all steps have a test class

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using Reductech.Sequence.Core.Internal.Errors;
+using Sequence.Core.Internal.Errors;
 
-namespace Reductech.Sequence.Connectors.Singer.Errors;
+namespace Sequence.Connectors.Singer.Errors;
 
 /// <summary>
 /// Identifying code for an error message in Structured Data
